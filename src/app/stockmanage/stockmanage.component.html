@@ -1,0 +1,330 @@
+<app-sidebar></app-sidebar>
+
+
+<div class="main-content">
+    <div class="w3-main" style="margin-left:315px;margin-top:82px;">
+        <div class="row">
+            <div class="col-6">
+                <div class="card">
+                    <div class="card-header">
+                        <h4>Add New Item</h4>
+                    </div>
+                    <div class="card-body">
+                        <form #frm="ngForm" (ngSubmit)="addItem(frm)" name="form_stock_add">
+
+                            <strong>Item ID :</strong>
+                            <div class="form-group">
+                                <input type="text" class="form-control" name="itemID" style="width:80%" ngModel
+                                    required>
+                            </div>
+                            <strong>Item Name :</strong>
+                            <div class="form-group">
+                                <input type="text" class="form-control" name="itemName" style="width:80%" ngModel
+                                    required>
+                            </div>
+                            <strong>Amount (l/peices) :</strong>
+                            <div class="form-group">
+                                <input type="text" class="form-control" name="itemAmount" style="width:80%" ngModel
+                                    required>
+                            </div>
+                            <strong>Dealer's name :</strong>
+                            <div class="form-group">
+                                <input type="text" class="form-control" name="dealersName" style="width:80%" ngModel
+                                    required>
+                            </div>
+                            <strong>Total Cost (Rs):</strong>
+                            <div class="form-group">
+                                <input type="text" class="form-control" name="totalCost" style="width:50%" ngModel
+                                    required>
+                            </div>
+                            <strong>notification Limit :</strong>
+                            <div class="form-group">
+                                <input type="text" class="form-control" name="limit" style="width:50%" ngModel required>
+                            </div>
+                            <div class="form-group">
+                                <input type="text" class="form-control" name="availableAmount"
+                                    style="visibility:hidden">
+                            </div>
+                            <button [disabled]="frm.invalid" class="btn btn-primary btn-round">Add Item</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="col-6">
+                <div class="card">
+                    <div class="card-header">
+                        <h4>Oops We are running out of</h4>
+                    </div>
+                    <div class="card-body">
+                        <div id="content">
+                            <div *ngFor='let fitem of finishedstockitems'>
+
+                                <div class="notification green">
+                                    <div class="info">
+                                        <h1>{{fitem.itemName}}</h1>
+                                        <p class="text-center">Item ID : {{fitem.itemID}}</p>
+                                        <p class="text-center">availableAmount : {{fitem.availableAmount}}</p>
+                                    </div>
+                                    <div class="icon"
+                                        [ngStyle]="{'background-color': getColor(fitem.availableAmount) }">
+                                        <i class="fa fa-gears"></i>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <br>
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h4>Consumed Item</h4>
+                </div>
+                <div class="card-body">
+                    <form #form="ngForm" (ngSubmit)="reduceItem(form)">
+                        <div class="row">
+                            <div class="col-4">
+                                <strong>Item ID :</strong>
+                                <div class="form-group">
+                                    <input type="text" class="form-control" name="itemID" style="width:7cm" ngModel
+                                        required>
+                                </div>
+                            </div>
+                            <div class="col-4">
+                                <strong>Amount(L/peices) :</strong>
+                                <div class="form-group">
+                                    <input type="text" class="form-control" name="itemAmount" style="width:7cm" ngModel
+                                        required>
+                                </div>
+                            </div>
+                            <div class="col-4">
+                                <br>
+                                <button [disabled]="form.invalid" class="btn btn-primary btn-round">Reduce Item</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <br>
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h2>Stock Information</h2>
+                </div>
+                <div class="card-body">
+                    <div class="table-full-width table-responsive"
+                        style="height :400px; overflow-y: auto; overflow-x: hidden">
+                        <table class="table">
+                            <thead class="text-primary">
+                                <th>
+                                    Item ID
+                                </th>
+                                <th>
+                                    Item Name
+                                </th>
+                                <th>
+                                    Amount bought
+                                </th>
+                                <th class="text-center">
+                                    available amount
+                                </th>
+                                <th class="text-center">
+                                    Quick Actions
+                                </th>
+                                <th class="text-center">
+                                    View More Information
+                                </th>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor='let item of stockitems'>
+                                    <td class="text-center">{{item.itemID}}</td>
+                                    <td class="text-center">{{item.itemName}}</td>
+                                    <td class="text-center">{{item.itemAmount}}</td>
+                                    <td class="text-center">{{item.availableAmount}}</td>
+                                    <td class="text-center">
+                                        <button type="button" rel="tooltip" title="Delete Item From Stock"
+                                            class="btn btn-danger btn-round btn-icon btn-icon-mini btn-neutral"
+                                            style="margin-right: 7px" (click)="deleteItem(item._id)">
+                                            <i class="fa fa-remove"></i>
+                                        </button>
+
+                                        <button type="button" rel="tooltip" title="Edit Item"
+                                            class="btn btn-info btn-round btn-icon btn-icon-mini btn-neutral"
+                                            (click)="openLg(editinfo)">
+                                            <i class="fa fa-edit"></i>
+                                        </button>
+                                    </td>
+
+                                    <ng-template #editinfo let-c="close" let-d="dismiss">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title text-center">{{item.itemName}}:: Edit Details
+                                            </h5>
+                                            <button type="button" class="close" (click)="d('Cross click')">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="card-body">
+
+                                            <form #frm2="ngForm" (ngSubmit)="updateItem(item._id,frm2)">
+                                                <div class="row">
+                                                    <div class="col-md-4 pr-1">
+                                                        <div class="form-group">
+                                                            <label>{{'Item ID'|translate}}</label>
+                                                            <input type="text" name="itemID" [(ngModel)]="item.itemID"
+                                                                class="form-control" value="{{item.itemID}}">
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-6 pr-1">
+                                                        <div class="form-group">
+                                                            <label>{{'Item Name'|translate}}</label>
+                                                            <input type="text" name="itemName"
+                                                                [(ngModel)]="item.itemName" class="form-control"
+                                                                value="{{item.itemName}}">
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="row">
+                                                    <div class="col-md-4 pr-1">
+                                                        <div class="form-group">
+                                                            <label>{{'Amount Bought'| translate}}</label>
+                                                            <input type="text" name="itemAmount"
+                                                                [(ngModel)]="item.itemAmount" class="form-control"
+                                                                value="{{item.itemAmount}}">
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-6 pr-1">
+                                                        <div class="form-group">
+                                                            <label>{{'Delear'|translate}}</label>
+                                                            <input type="text" name="dealersName"
+                                                                [(ngModel)]="item.dealersName" class="form-control"
+                                                                value="{{item.dealersName}}">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-md-4 pr-1">
+                                                        <div class="form-group">
+                                                            <label>{{'Total Cost'|translate}}</label>
+                                                            <input type="text" name="totalCost"
+                                                                [(ngModel)]="item.totalCost" class="form-control"
+                                                                value="{{item.totalCost}}">
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="col-md-4 pr-1">
+                                                        <div class="form-group">
+                                                            <label>{{'Notification Limit'|translate}}</label>
+                                                            <input type="text" name="limit" [(ngModel)]="item.limit"
+                                                                class="form-control" value="{{item.limit}}">
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="col-md-4 pr-1">
+                                                        <div class="form-group">
+                                                            <label>{{'Date'|translate}}</label>
+                                                            <input type="text" name="date" [(ngModel)]="date"
+                                                                class="form-control" value="{{item.date}}">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-md-4 pr-1">
+                                                        <div class="form-group">
+                                                            <label>{{'Postal Code'|translate}}</label>
+                                                            <input type="number" name="posCode" [(ngModel)]="posCode"
+                                                                class="form-control"
+                                                                value="{{ (reguser | async)?.posCode  }}">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-md-12">
+                                                        <div class="form-group">
+                                                            <label>{{'About Me'|translate}}</label>
+                                                            <textarea rows="4" name="about" [(ngModel)]="about"
+                                                                cols="80" class="form-control"
+                                                                placeholder="Here can be your description"
+                                                                value="{{ (reguser | async)?.bio  }}"></textarea>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <button class="btn btn-primary btn-round">Update Item</button>
+
+                                            </form>
+                                        </div>
+                                        <div class="row" style="padding:5px">
+                                        </div>
+                                        <div class="modal-footer">
+                                            <div class="divider"></div>
+                                            <div class="right-side">
+                                                <button type="button" class="btn" style="color: red"
+                                                    (click)="c('Close click')">Dismiss</button>
+                                            </div>
+                                        </div>
+                                    </ng-template>
+
+                                    <td class="text-center">
+                                        <button class="btn btn-info btn-round" (click)="openLg(info)">More Info</button>
+                                    </td>
+
+                                    <ng-template #info let-c="close" let-d="dismiss">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title text-center">{{item.itemName}}'s Expanded Details
+                                            </h5>
+                                            <button type="button" class="close" (click)="d('Cross click')">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="row" style="padding:5px">
+                                            <div class="col-6">
+                                                <strong>Item ID : </strong><br>{{item.itemID}}<br>
+                                                <strong>Item Name : </strong><br>{{item.itemName}}<br>
+                                                <strong>Amount Bought : </strong><br>{{item.itemAmount}}<br>
+                                                <strong> available Amount : </strong><br>{{item.availableAmount}}<br>
+                                            </div>
+                                            <div class="col-5">
+                                                <strong>Total Cost : </strong><br>{{item.totalCost}}<br>
+                                                <strong>Date : </strong><br>{{item.totalCost}}<br>
+                                                <strong>Notification Limit : </strong><br>{{item.limit}}<br>
+
+                                            </div><br>
+                                            <div class="col-4">
+                                                <strong>Dealer's Name : </strong>{{item.dealersName}}<br>
+                                            </div>
+                                            <div class="col-4">
+                                            </div>
+                                        </div>
+                                        <div class="row" style="padding:5px">
+                                        </div>
+                                        <div class="modal-footer">
+                                            <div class="divider"></div>
+                                            <div class="right-side">
+                                                <button type="button" class="btn" style="color: red"
+                                                    (click)="c('Close click')">Dismiss</button>
+                                            </div>
+                                        </div>
+                                    </ng-template>
+                                </tr>
+                                <a style="color:red">{{deleteMessage}}</a>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+</div>
+<footer class="w3-container w3-theme-d5">
+    <p>Made by group 8</p>
+</footer>

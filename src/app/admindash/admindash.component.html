@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+<body class="w3-light-grey">
+
+  <!-- Sidebar/menu -->
+
+  <nav class="w3-sidebar w3-collapse w3-white w3-animate-left" style="z-index:3;width:300px;" id="mySidebar"><br>
+
+    <nav class="navbar navbar-expand-lg navbar-light">
+      <div class="header text-center" style=" margin : 5px">
+        <h2 class="title" style="margin-top : 15px;margin-bottom: 0px">Rio Top Service Station</h2>
+      </div>
+    </nav>
+
+    <div class="w3-bar-block">
+      <br>
+      <p>Admin: name</p>
+      <hr>
+      <a href="#" class="w3-bar-item w3-button w3-padding-16 w3-hide-large w3-dark-grey w3-hover-black"
+        onclick="w3_close()" title="close menu"><i class="fa fa-remove fa-fw"></i>  Close Menu</a>
+      <a class="w3-bar-item w3-button w3-padding"><i class="fa fa-car fa-fw"></i>  Overview</a>
+      <a class="w3-bar-item w3-button w3-padding" (click)="managestock()"><i class="fa fa-bullseye fa-fw"></i> 
+        Stock Management</a>
+      <a class="w3-bar-item w3-button w3-padding" (click)="genreports()"><i class="fa fa-eye fa-fw"></i> 
+        Genarate Reports</a>
+      <a class="w3-bar-item w3-button w3-padding" (click)="yearPlanLogin()"><i class="fa fa-users fa-fw"></i>
+        View User</a>
+      <a class="w3-bar-item w3-button w3-padding" (click)="adminForumLogin()"><i class="fa fa-book fa-fw"></i> 
+        Forum</a>
+      <a class="w3-bar-item w3-button w3-padding" (click)="salaryLogin()"><i class="fa fa-bell fa-fw"></i>  Appointment
+        Management</a>
+      <a class="w3-bar-item w3-button w3-padding" (click)="feesLogin()"><i class="fa fa-bank fa-fw"></i>  Bla bla</a>
+      <a class="w3-bar-item w3-button w3-padding" (click)="leavesLogin()"><i class="fa fa-history fa-fw"></i>Bla bla</a>
+      <a class="w3-bar-item w3-button w3-padding" (click)="settingsLogin()"><i class="fa fa-cog fa-fw"></i> 
+        Settings</a>
+      <br><br>
+      <ul>
+        <button class="btn btn-info btn-round" style="width:90%" (click)="switchLanguage('en')">Switch to
+          English</button>
+        <button class="btn btn-info btn-round" style="width:90%" (click)="switchLanguage('lk')">සිංහල පරිවර්තනය</button>
+      </ul>
+    </div>
+  </nav>
+
+
+  <!-- Overlay effect when opening sidebar on small screens -->
+  <div class="w3-overlay w3-hide-large w3-animate-opacity" onclick="w3_close()" style="cursor:pointer"
+    title="close side menu" id="myOverlay"></div>
+
+  <!-- !PAGE CONTENT! -->
+  <div class="w3-main" style="margin-left:300px;margin-top:43px;">
+
+    <hr>
+    <header class="w3-container" style="padding-top:22px">
+      <h5><b><i class="fa fa-dashboard"></i> My Dashboard</b></h5>
+    </header>
+
+    <div class="w3-row-padding w3-margin-bottom">
+      <div class="w3-quarter">
+        <div class="w3-container w3-red w3-padding-16">
+          <div class="w3-left"><i class="fa fa-comment w3-xxxlarge"></i></div>
+          <div class="w3-right">
+            <h3>{{numposts}}</h3>
+          </div>
+          <div class="w3-clear"></div>
+          <h4>{{'Forum Posts'| translate}}</h4>
+        </div>
+      </div>
+      <div class="w3-quarter">
+        <div class="w3-container w3-blue w3-padding-16">
+          <div class="w3-left"><i class="fa fa-users w3-xxxlarge"></i></div>
+          <div class="w3-right">
+            <h3>{{numusers}}</h3>
+          </div>
+          <div class="w3-clear"></div>
+          <h4>Users</h4>
+        </div>
+      </div>
+      <div class="w3-quarter">
+        <div class="w3-container w3-teal w3-padding-16">
+          <div class="w3-left"><i class="fa fa-car w3-xxxlarge"></i></div>
+          <div class="w3-right">
+            <h3>{{numveh}}</h3>
+          </div>
+          <div class="w3-clear"></div>
+          <h4>Vehicles</h4>
+        </div>
+      </div>
+      <div class="w3-quarter">
+        <div class="w3-container w3-orange w3-text-white w3-padding-16">
+          <div class="w3-left"><i class="fa fa-book fa-fw w3-xxxlarge"></i></div>
+          <div class="w3-right">
+            <h3>{{numapp}}</h3>
+          </div>
+          <div class="w3-clear"></div>
+          <h4>Appointments</h4>
+        </div>
+      </div>
+    </div>
+
+    <div clas="row">
+      <div class="col-10">
+        <div class="card card-chart">
+          <div class="card-header">
+            <div class="row">
+              <canvas baseChart [datasets]="barChartData" [labels]="barChartLabels" [options]="barChartOptions"
+                [legend]="barChartLegend" [chartType]="barChartType">
+              </canvas>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-4">
+
+      </div>
+
+    </div>
+
+    <div class="row">
+      <div class="col-6">
+        <div class="card card-chart">
+          <div class="card-header">
+            <div class="row">
+              <div class="col-5">
+                <h4 class="card-title">Today's Appointments</h4>
+              </div>
+              <div class="col-7">
+                <h4 class="card-title">{{myDate | date:'MMM d, y, h:mm:ss a'}}</h4>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <canvas baseChart [data]="doughnutChartData" [labels]="doughnutChartLabels"
+              [chartType]="doughnutChartType"></canvas>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-6">
+        <div class="card">
+          <div class="card-header">
+            <h4>Today's Appointments</h4>
+          </div>
+          <div class="card-body">
+            <div class="table-full-width table-responsive" style="height :400px; overflow-y: auto; overflow-x: hidden">
+              <table class="table">
+                <thead class="text-primary">
+                  <th class="text-center">
+                    Username
+                  </th>
+                  <th class="text-center">
+                    Time
+                  </th>
+                  <th class="text-center">
+                    Package
+                  </th>
+
+                  <th>Cancel</th>
+                  <th>Done</th>
+
+                </thead>
+                <tbody>
+                  <tr *ngFor='let x of appointments'>
+                    <td *ngIf="x.approved == true && x.date == today">{{x.username}}</td>
+                    <td *ngIf="x.approved == true && x.date == today" class="text-right">{{x.time}}</td>
+                    <td *ngIf="x.approved == true && x.date == today" class="text-right">{{x.package}}</td>
+                    <td *ngIf="x.approved == true && x.date == today">
+                      <button type="button" rel="tooltip" title="cancel appointment"
+                        class="btn btn-danger btn-round btn-icon btn-icon-mini btn-neutral" (click)="decline(x.vehnum)">
+                        <i class="fa fa-remove"></i>
+                      </button>
+                    </td>
+                    <td *ngIf="x.approved == true && x.date == today">
+                      <button type="button" rel="tooltip" title="appointment done"
+                        class="btn btn-info btn-round btn-icon btn-icon-mini btn-neutral"
+                        (click)="done(x.vehnum)">
+                        <i class="fa fa-check"></i>
+                      </button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+        
+    <hr>
+
+    <!---->
+
+    <!--2-->
+    <div class="col-6">
+      <div class="card card-chart">
+        <div class="card-header">
+          <div class="row">
+            <div class="col-5">
+              <h4 class="card-title">System Statistics</h4>
+            </div>
+            <div class="col-7">
+              <h4 class="card-title">{{myDate | date:'MMM d, y, h:mm:ss a'}}</h4>
+            </div>
+          </div>
+        </div>
+        <hr>
+        <div class="card-body">
+          <div class="row">
+            <div class="col-4">
+              <h5><strong>{{(totalMemCount | async)?.total}} </strong>Total Users</h5><br>
+              <h6><strong>{{(totalMemCount | async)?.admins}} </strong>System Admins</h6><br>
+              <h6><strong>{{(totalMemCount | async)?.farmers}} </strong>Farmers</h6><br>
+              <h6><strong>{{(totalMemCount | async)?.retailers}} </strong>Retailers</h6><br>
+              <h6><strong>{{(totalMemCount | async)?.both}} </strong>Dual Category</h6><br>
+              <h5><strong>{{(totalSaleCount | async)?.total}} </strong>Total Orders</h5><br>
+              <h6><strong>{{(totalSaleCount | async)?.sale}} </strong>Total Sales</h6><br>
+              <h6><strong>{{(totalSaleCount | async)?.want}} </strong>Total Wanted</h6><br>
+              <h5><strong>{{(totalPostCount | async)?.total}} </strong>Total Posts</h5><br>
+            </div>
+            <div class="col-8">
+              <div class="row">
+                <canvas baseChart [data]="doughnutChartData" [labels]="doughnutChartLabels"
+                  [chartType]="doughnutChartType"></canvas>
+              </div>
+              <div class="row">
+                <canvas baseChart [datasets]="barChartData" [labels]="barChartLabels" [options]="barChartOptions"
+                  [legend]="barChartLegend" [chartType]="barChartType">
+                </canvas>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <!--Table-->
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="card">
+          <div class="card-header">
+            <i class="fa fa-align-justify"></i> Appointments to be approved
+          </div>
+          <div class="card-body">
+            <table class="table table-bordered table-striped table-sm">
+              <thead>
+                <tr>
+                  <th>Username</th>
+                  <th>Date</th>
+                  <th>Time</th>
+                  <th>Package</th>
+                  <th>Approve/</th>
+                </tr>
+              </thead>
+
+              <tbody>
+                <li *ngFor="let x of appointments">
+                  <tr>
+                    <td>{{x.username}}</td>
+                    <td>{{x.date}}</td>
+                    <td>{{x.time}}</td>
+                    <td>
+                      <span class="badge badge-success">{{x.package}}</span>
+                    </td>
+                    <td><button type="submit"></button></td>
+                  </tr>
+                </li>
+
+                <tr>
+                  <td>Zbyněk Phoibos</td>
+                  <td>2012/02/01</td>
+                  <td>Staff</td>
+                  <td>
+                    <span class="badge badge-danger">Banned</span>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Einar Randall</td>
+                  <td>2012/02/01</td>
+                  <td>Admin</td>
+                  <td>
+                    <span class="badge badge-secondary">Inactive</span>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Félix Troels</td>
+                  <td>2012/03/01</td>
+                  <td>Member</td>
+                  <td>
+                    <span class="badge badge-warning">Pending</span>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+
+            <nav>
+              <ul class="pagination">
+                <li class="page-item"><a class="page-link" href="#">Prev</a></li>
+                <li class="page-item active">
+                  <a class="page-link" href="#">1</a>
+                </li>
+                <li class="page-item"><a class="page-link" href="#">2</a></li>
+                <li class="page-item"><a class="page-link" href="#">3</a></li>
+                <li class="page-item"><a class="page-link" href="#">4</a></li>
+                <li class="page-item"><a class="page-link" href="#">Next</a></li>
+              </ul>
+            </nav>
+          </div>
+        </div>
+      </div>
+
+      <br>
+
+      <div class="w3-container w3-dark-grey w3-padding-32">
+        <div class="w3-row">
+          <div class="w3-container w3-third">
+            <h5 class="w3-bottombar w3-border-green">Address</h5>
+            <p> “Singithi Kids Paradise Early Childhood Development Center,”</p>
+            <p>Henpitagedara,</p>
+            <p>Dunagaha.</p>
+          </div>
+
+          <div class="w3-container w3-third">
+            <h5 class="w3-bottombar w3-border-red">Contact</h5>
+            <p>0112 568 962</p>
+            <p>sigithikids@gmail.com</p>
+          </div>
+
+          <div class="w3-container w3-third">
+            <h5 class="w3-bottombar w3-border-orange">vision</h5>
+            <p>"Our goal is to activate the child's own natural desire to learn and to prepare them not only
+              for the school but also for the life !!"</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Footer -->
+      <img src="/assets/images/bg-title-02.jpg" class="img-responsive" style="width:100%">
+
+      <footer class="w3-container w3-theme-d5">
+        <p>Made by group 8</p>
+      </footer>
+
+      <!-- End page content -->
+    </div>
